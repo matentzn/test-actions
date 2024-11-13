@@ -17,7 +17,7 @@ jobs:
       - name: Check for intersection_of in uberon-edit.obo diff
         id: check_intersection_of
         run: |
-          git diff src/ontology/uberon-edit.obo > diff.txt
+          git diff ${{ github.base_ref }}... -- src/ontology/uberon-edit.obo > diff.txt
           if grep -E '^(-|\+)intersection_of:' diff.txt; then
             echo "intersection_of_found=true" >> $GITHUB_ENV
           else
