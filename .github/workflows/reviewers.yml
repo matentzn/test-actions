@@ -23,9 +23,15 @@ jobs:
             echo "intersection_of_found=false" >> $GITHUB_ENV
           fi
 
-      - name: Assign reviewer and block PR
+      - name: Assign reviewer
         if: env.intersection_of_found == 'true'
         run: |
-          gh pr reviewers add ${{ github.event.pull_request.number }} --reviewer specific-reviewer
+          gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/requested_reviewers \
+            --method POST \
+            --field reviewers='["matentzn"]'
+
+      - name: Block PR by requesting changes
+        if: env.intersection_of_found == 'true'
+        run: |
           gh pr review ${{ github.event.pull_request.number }} --request-changes --body "Changes detected in \`src/ontology/uberon-edit.obo\` involving \`intersection_of\`. Review by @specific-reviewer is required."
           exit 1  # Fail the workflow to block merging
