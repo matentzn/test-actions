@@ -1,0 +1,31 @@
+name: Assign Reviewers for Uberon
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - src/ontology/uberon-edit.obo
+
+jobs:
+  assign-reviewer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check for intersection_of in uberon-edit.obo
+        id: check_intersection_of
+        run: |
+          if grep -q '^intersection_of' src/ontology/uberon-edit.obo; then
+            echo "intersection_of_found=true" >> $GITHUB_ENV
+          else
+            echo "intersection_of_found=false" >> $GITHUB_ENV
+          fi
+
+      - name: Assign reviewer and block PR
+        if: env.intersection_of_found == 'true'
+        run: |
+          gh pr reviewers add ${{ github.event.pull_request.number }} --reviewer specific-reviewer
+          gh pr review ${{ github.event.pull_request.number }} --request-changes --body "Changes detected in \`src/ontology/uberon-edit.obo\` involving \`intersection_of\`. Review by @specific-reviewer is required."
+          exit 1  # Fail the workflow to block merging
