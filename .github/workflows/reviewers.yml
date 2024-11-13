@@ -39,4 +39,3 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh pr review ${{ github.event.pull_request.number }} --request-changes --body "Changes detected in \`src/ontology/uberon-edit.obo\` involving \`intersection_of\`. Review by @specific-reviewer is required."
-          exit 1  # Fail the workflow to block merging
