@@ -14,9 +14,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up GitHub CLI
-        run: gh auth setup-git
-
       - name: Check for intersection_of in uberon-edit.obo
         id: check_intersection_of
         run: |
