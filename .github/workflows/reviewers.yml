@@ -14,10 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Check for intersection_of in uberon-edit.obo
+      - name: Check for intersection_of in uberon-edit.obo diff
         id: check_intersection_of
         run: |
-          if grep -q '^intersection_of' src/ontology/uberon-edit.obo; then
+          git diff src/ontology/uberon-edit.obo > diff.txt
+          if grep -E '^(-|\+)intersection_of:' diff.txt; then
             echo "intersection_of_found=true" >> $GITHUB_ENV
           else
             echo "intersection_of_found=false" >> $GITHUB_ENV
