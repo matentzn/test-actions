@@ -44,4 +44,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr review ${{ github.event.pull_request.number }} --request-changes --body "Changes detected in \`src/ontology/uberon-edit.obo\` involving \`intersection_of\`. Review by @specific-reviewer is required."
+          gh pr review ${{ github.event.pull_request.number }} --request-changes --body "Changes detected in \`src/ontology/uberon-edit.obo\` involving \`intersection_of\`. Review by specific Uberon Core Team member is required."
