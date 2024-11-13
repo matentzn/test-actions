@@ -30,7 +30,7 @@ jobs:
         run: |
           gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/requested_reviewers \
             --method POST \
-            --field reviewers='["specific-reviewer"]'
+            --field reviewers='["matentzn"]'
 
       - name: Block PR by requesting changes
         if: env.intersection_of_found == 'true'
