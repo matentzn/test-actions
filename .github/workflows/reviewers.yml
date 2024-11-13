@@ -13,11 +13,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
+        with:
+          fetch-depth: 0  # Fetch the entire history for all branches
+      
+      - name: Fetch base branch
+        run: |
+          git fetch origin ${{ github.base_ref }}  # Fetch base branch explicitly
+      
       - name: Check for intersection_of in uberon-edit.obo diff
         id: check_intersection_of
         run: |
-          git fetch origin ${{ github.base_ref }}
           git diff origin/${{ github.base_ref }}...HEAD -- src/ontology/uberon-edit.obo > diff.txt
           if grep -E '^(-|\+)intersection_of:' diff.txt; then
             echo "intersection_of_found=true" >> $GITHUB_ENV
